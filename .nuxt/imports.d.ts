@@ -32,5 +32,12 @@ export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composab
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
 export { formatNaira, formatNairaRaw } from '../utils/formatCurrency';
 export { useCartStore } from '../stores/cart.store';
+export { getNitroOrigin } from '../node_modules/nuxt-site-config/dist/runtime/app/composables/getNitroOrigin';
+export { updateSiteConfig } from '../node_modules/nuxt-site-config/dist/runtime/app/composables/updateSiteConfig';
+export { useNitroOrigin } from '../node_modules/nuxt-site-config/dist/runtime/app/composables/useNitroOrigin';
+export { useSiteConfig } from '../node_modules/nuxt-site-config/dist/runtime/app/composables/useSiteConfig';
+export { createSitePathResolver, withSiteTrailingSlash, withSiteUrl } from '../node_modules/nuxt-site-config/dist/runtime/app/composables/utils';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useImage } from '../node_modules/@nuxt/image/dist/runtime/composables';
+export { useRobotsRule } from '../node_modules/@nuxtjs/robots/dist/runtime/app/composables/useRobotsRule';
+export { useBotDetection } from '../node_modules/@nuxtjs/robots/dist/runtime/app/composables/useBotDetection';

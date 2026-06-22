@@ -150,7 +150,12 @@ import { useGifts } from '~/composables/modules/gifts/useGifts';
 import { formatNaira } from '~/utils/formatCurrency';
 
 definePageMeta({ layout: 'default' });
-useHead({ title: 'Explore Gifts — CurateWithNG' });
+useSeoMeta({ 
+  title: 'Explore Gifts — CurateWithNG',
+  description: 'Browse the best curated gifts in Nigeria for any occasion, budget, or recipient. Find the perfect present today.',
+  ogTitle: 'Explore Gifts — CurateWithNG',
+  ogDescription: 'Browse the best curated gifts in Nigeria for any occasion, budget, or recipient.',
+});
 
 const { getGifts } = useGifts();
 

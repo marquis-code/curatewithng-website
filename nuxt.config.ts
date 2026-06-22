@@ -5,7 +5,14 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxt/image',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
   ],
+
+  site: {
+    url: 'https://curatewithng.com',
+    name: 'CurateWithNG'
+  },
 
   css: ['~/assets/css/main.css'],
 

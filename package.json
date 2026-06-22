@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.8.1",
+    "@nuxtjs/robots": "^6.1.1",
+    "@nuxtjs/sitemap": "^8.2.1",
     "@paystack/inline-js": "^2.2.0",
     "@pinia/nuxt": "^0.5.5",
     "axios": "^1.18.0",

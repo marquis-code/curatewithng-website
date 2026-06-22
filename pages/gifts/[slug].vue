@@ -145,11 +145,13 @@ const fetchGift = async () => {
     if (data.images?.length) {
       activeImage.value = data.images[0];
     }
-    useHead({
+    useSeoMeta({
       title: `${data.name} — CurateWithNG`,
-      meta: [
-        { name: 'description', content: data.description }
-      ]
+      description: data.description,
+      ogTitle: `${data.name} — CurateWithNG`,
+      ogDescription: data.description,
+      ogImage: data.images?.[0] || 'https://res.cloudinary.com/djd18sqhi/image/upload/v1/curatewithng/demo-hamper1.jpg',
+      twitterCard: 'summary_large_image',
     });
   } catch (e) {
     error.value = true;

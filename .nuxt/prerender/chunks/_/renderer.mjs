@@ -6,9 +6,9 @@ import { b as buildAssetsURL, p as publicAssetsURL, u as useRuntimeConfig, a as 
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'file:///Users/marquis/curatewithng/website/node_modules/unhead/dist/server.mjs';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { stringify, uneval } from 'file:///Users/marquis/curatewithng/website/node_modules/devalue/index.js';
+import { FlatMetaPlugin, DeprecationsPlugin, PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file:///Users/marquis/curatewithng/website/node_modules/unhead/dist/plugins.mjs';
 import { walkResolver } from 'file:///Users/marquis/curatewithng/website/node_modules/unhead/dist/utils.mjs';
 import { isRef, toValue, hasInjectionContext, inject, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated } from 'file:///Users/marquis/curatewithng/website/node_modules/vue/index.mjs';
-import { DeprecationsPlugin, PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file:///Users/marquis/curatewithng/website/node_modules/unhead/dist/plugins.mjs';
 
 const VueResolver = (_, value) => {
   return isRef(value) ? toValue(value) : value;
@@ -65,6 +65,16 @@ function clientUseHead(head, input, options = {}) {
     });
   }
   return entry;
+}
+function useSeoMeta(input = {}, options = {}) {
+  const head = options.head || /* @__PURE__ */ injectHead();
+  head.use(FlatMetaPlugin);
+  const { title, titleTemplate, ...meta } = input;
+  return useHead({
+    title,
+    titleTemplate,
+    _flatMeta: meta
+  }, options);
 }
 
 // @__NO_SIDE_EFFECTS__
@@ -536,5 +546,5 @@ const renderer = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: handler
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { headSymbol as h, renderer as r, useHead as u };
+export { useHead as a, headSymbol as h, renderer as r, useSeoMeta as u };
 //# sourceMappingURL=renderer.mjs.map
