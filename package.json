@@ -1,0 +1,31 @@
+{
+  "name": "curatewithng-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev -p 3001",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.8.1",
+    "@paystack/inline-js": "^2.2.0",
+    "@pinia/nuxt": "^0.5.5",
+    "axios": "^1.18.0",
+    "date-fns": "^4.1.0",
+    "firebase": "^12.15.0",
+    "lucide-vue-next": "^1.0.0",
+    "nuxt": "^3.14.0",
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "typescript": "^5.7.3"
+  }
+}

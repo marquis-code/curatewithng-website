@@ -1,0 +1,105 @@
+import type { Config } from 'tailwindcss'
+
+export default <Config>{
+  content: [
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './composables/**/*.{js,ts}',
+    './plugins/**/*.{js,ts}',
+    './app.vue',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#faf5ff',
+          100: '#f3e8ff',
+          200: '#e9d5ff',
+          300: '#d8b4fe',
+          400: '#c084fc',
+          500: '#a855f7',
+          600: '#9333ea',
+          700: '#7c3aed',
+          800: '#6B21A8',
+          900: '#581c87',
+          950: '#3b0764',
+        },
+        accent: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#D97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
+        success: {
+          500: '#10b981',
+          600: '#059669',
+          700: '#047857',
+        },
+        danger: {
+          500: '#ef4444',
+          600: '#DC2626',
+          700: '#b91c1c',
+        },
+      },
+      fontFamily: {
+        heading: ['Plus Jakarta Sans', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'slide-up': 'slideUp 0.5s ease-out',
+        'slide-down': 'slideDown 0.3s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideDown: {
+          '0%': { opacity: '0', transform: 'translateY(-10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+      },
+      backgroundImage: {
+        'gradient-brand': 'linear-gradient(135deg, #6B21A8 0%, #9333ea 50%, #D97706 100%)',
+        'gradient-hero': 'linear-gradient(135deg, #1e0533 0%, #2d1052 30%, #3b0764 60%, #1a0a2e 100%)',
+        'gradient-card': 'linear-gradient(145deg, rgba(107,33,168,0.05) 0%, rgba(217,119,6,0.05) 100%)',
+        'shimmer': 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+      },
+      boxShadow: {
+        'glow': '0 0 40px rgba(107, 33, 168, 0.15)',
+        'glow-accent': '0 0 40px rgba(217, 119, 6, 0.15)',
+        'card': '0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04)',
+        'card-hover': '0 4px 12px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.06)',
+      },
+    },
+  },
+  plugins: [],
+}
