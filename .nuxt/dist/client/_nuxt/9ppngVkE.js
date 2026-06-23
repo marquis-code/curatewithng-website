@@ -1,0 +1,1 @@
+import{I as r}from"./DMHXpCx3.js";const s={getVendors:e=>r.get("/vendors",{params:e}),getVendorBySlug:e=>r.get(`/vendors/${e}`)},g=()=>({getVendors:async n=>(await s.getVendors(n)).data,getVendorBySlug:async n=>(await s.getVendorBySlug(n)).data});export{g as u};

@@ -11,7 +11,7 @@
       </div>
 
       <!-- Wizard Steps -->
-      <div v-if="!showResults" class="card p-8">
+      <div v-if="!showResults" class="bg-white rounded-[2rem] p-8 md:p-12 border border-slate-100">
         <!-- Progress bar -->
         <div class="flex items-center gap-2 mb-8">
           <div v-for="i in totalSteps" :key="i" class="flex-1 h-2 rounded-full transition-all duration-300"
@@ -22,35 +22,45 @@
         <div v-if="currentStep === 1" class="animate-fade-in">
           <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">Who is the gift for?</h2>
           <p class="text-slate-500 mb-6">Select your relationship with the recipient</p>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <button
               v-for="rel in relationships"
               :key="rel.value"
               @click="form.relationship = rel.value"
-              :class="['p-4 rounded-xl border-2 text-left transition-all hover:border-primary-300',
-                form.relationship === rel.value ? 'border-primary-800 bg-primary-50' : 'border-slate-200']"
+              :class="['p-5 rounded-2xl text-left transition-all duration-300 relative overflow-hidden group',
+                form.relationship === rel.value 
+                  ? 'bg-primary-800 text-white shadow-lg ring-4 ring-primary-100' 
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100']"
             >
-              <component :is="rel.icon" class="w-8 h-8 mb-2 text-slate-700" />
-              <div class="font-medium text-sm text-slate-900">{{ rel.label }}</div>
+              <div class="absolute -right-4 -bottom-4 opacity-5 transition-transform duration-500 group-hover:scale-110" v-if="form.relationship === rel.value">
+                <component :is="rel.icon" class="w-24 h-24 text-white" />
+              </div>
+              <component :is="rel.icon" :class="['w-8 h-8 mb-3 transition-colors', form.relationship === rel.value ? 'text-accent-400' : 'text-slate-500']" />
+              <div :class="['font-semibold text-sm relative z-10', form.relationship === rel.value ? 'text-white' : 'text-slate-900']">{{ rel.label }}</div>
             </button>
           </div>
-          <input v-model="form.recipientName" type="text" placeholder="Recipient's name (optional)" class="input-field mt-4" />
+          <UiCustomInput v-model="form.recipientName" placeholder="Recipient's name (optional)" class="mt-4" />
         </div>
 
         <!-- Step 2: Occasion -->
         <div v-if="currentStep === 2" class="animate-fade-in">
           <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">What's the occasion?</h2>
           <p class="text-slate-500 mb-6">Select the gifting occasion</p>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <button
               v-for="occ in occasions"
               :key="occ.value"
               @click="form.occasion = occ.value"
-              :class="['p-4 rounded-xl border-2 text-left transition-all hover:border-primary-300',
-                form.occasion === occ.value ? 'border-primary-800 bg-primary-50' : 'border-slate-200']"
+              :class="['p-5 rounded-2xl text-left transition-all duration-300 relative overflow-hidden group',
+                form.occasion === occ.value 
+                  ? 'bg-primary-800 text-white shadow-lg ring-4 ring-primary-100' 
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100']"
             >
-              <component :is="occ.icon" class="w-8 h-8 mb-2 text-slate-700" />
-              <div class="font-medium text-sm text-slate-900">{{ occ.label }}</div>
+              <div class="absolute -right-4 -bottom-4 opacity-5 transition-transform duration-500 group-hover:scale-110" v-if="form.occasion === occ.value">
+                <component :is="occ.icon" class="w-24 h-24 text-white" />
+              </div>
+              <component :is="occ.icon" :class="['w-8 h-8 mb-3 transition-colors', form.occasion === occ.value ? 'text-accent-400' : 'text-slate-500']" />
+              <div :class="['font-semibold text-sm relative z-10', form.occasion === occ.value ? 'text-white' : 'text-slate-900']">{{ occ.label }}</div>
             </button>
           </div>
         </div>
@@ -60,18 +70,22 @@
           <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">What's your budget?</h2>
           <p class="text-slate-500 mb-6">Set your budget range in Naira</p>
           <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="text-sm font-medium text-slate-600 mb-1 block">Minimum (₦)</label>
-              <input v-model.number="budgetMinNaira" type="number" class="input-field" placeholder="5,000" />
-            </div>
-            <div>
-              <label class="text-sm font-medium text-slate-600 mb-1 block">Maximum (₦)</label>
-              <input v-model.number="budgetMaxNaira" type="number" class="input-field" placeholder="50,000" />
-            </div>
+            <UiCustomInput
+              v-model="formattedBudgetMin"
+              type="text"
+              label="Minimum (₦)"
+              placeholder="5,000"
+            />
+            <UiCustomInput
+              v-model="formattedBudgetMax"
+              type="text"
+              label="Maximum (₦)"
+              placeholder="50,000"
+            />
           </div>
           <div class="flex gap-2 mt-4 flex-wrap">
             <button v-for="preset in budgetPresets" :key="preset.label" @click="budgetMinNaira = preset.min; budgetMaxNaira = preset.max"
-              class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm text-slate-600 hover:border-primary-300 hover:bg-primary-50 transition-all">
+              class="px-4 py-2 rounded-xl bg-slate-50 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all">
               {{ preset.label }}
             </button>
           </div>
@@ -81,13 +95,15 @@
         <div v-if="currentStep === 4" class="animate-fade-in">
           <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">What are they into?</h2>
           <p class="text-slate-500 mb-6">Select interests (pick as many as you like)</p>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex flex-wrap gap-3">
             <button
               v-for="interest in interestOptions"
               :key="interest"
               @click="toggleInterest(interest)"
-              :class="['px-4 py-2 rounded-full border-2 text-sm font-medium transition-all',
-                form.interests.includes(interest) ? 'border-primary-800 bg-primary-50 text-primary-800' : 'border-slate-200 text-slate-600 hover:border-slate-300']"
+              :class="['px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300',
+                form.interests.includes(interest) 
+                  ? 'bg-primary-800 text-white shadow-md ring-2 ring-primary-100' 
+                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100']"
             >
               {{ interest }}
             </button>
@@ -100,19 +116,22 @@
           <p class="text-slate-500 mb-6">Add any extra context to help our AI (optional)</p>
           <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="text-sm font-medium text-slate-600 mb-1 block">Age</label>
-                <input v-model.number="form.age" type="number" class="input-field" placeholder="28" />
-              </div>
-              <div>
-                <label class="text-sm font-medium text-slate-600 mb-1 block">Gender</label>
-                <select v-model="form.gender" class="input-field">
-                  <option value="">Not specified</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                  <option value="non-binary">Non-binary</option>
-                </select>
-              </div>
+              <UiCustomInput
+                v-model.number="form.age"
+                type="number"
+                label="Age"
+                placeholder="28"
+              />
+              <UiCustomSelect
+                v-model="form.gender"
+                label="Gender"
+                placeholder="Not specified"
+                :options="[
+                  { label: 'Female', value: 'female' },
+                  { label: 'Male', value: 'male' },
+                  { label: 'Non-binary', value: 'non-binary' }
+                ]"
+              />
             </div>
             <textarea v-model="form.additionalNotes" rows="3" class="input-field" placeholder="E.g., She recently started a new job and loves everything purple..."></textarea>
           </div>
@@ -195,6 +214,22 @@ const recommendations = ref<CurationRecommendation[]>([]);
 
 const budgetMinNaira = ref(5000);
 const budgetMaxNaira = ref(50000);
+
+const formattedBudgetMin = computed({
+  get: () => budgetMinNaira.value ? budgetMinNaira.value.toLocaleString('en-NG') : '',
+  set: (val: string) => {
+    const num = parseInt(val.replace(/,/g, '').replace(/\D/g, ''), 10);
+    budgetMinNaira.value = isNaN(num) ? 0 : num;
+  }
+});
+
+const formattedBudgetMax = computed({
+  get: () => budgetMaxNaira.value ? budgetMaxNaira.value.toLocaleString('en-NG') : '',
+  set: (val: string) => {
+    const num = parseInt(val.replace(/,/g, '').replace(/\D/g, ''), 10);
+    budgetMaxNaira.value = isNaN(num) ? 0 : num;
+  }
+});
 
 const form = reactive({
   recipientName: '',

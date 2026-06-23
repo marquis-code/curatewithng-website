@@ -14,11 +14,11 @@
         <div class="space-y-4 mb-8">
           <div v-for="item in cartStore.items" :key="item.gift._id" class="card p-4 flex gap-4">
             <div class="w-20 h-20 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
-              <img :src="item.gift.images?.[0] || '/placeholder-gift.jpg'" :alt="item.gift.name" class="w-full h-full object-cover" />
+              <img :src="item.gift?.images?.[0] || '/placeholder-gift.jpg'" :alt="item.gift?.name || 'Gift'" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1">
-              <h3 class="font-heading font-semibold text-slate-900">{{ item.gift.name }}</h3>
-              <p class="text-sm text-primary-600 font-medium">{{ formatNaira(item.gift.discountPrice || item.gift.price) }}</p>
+              <h3 class="font-heading font-semibold text-slate-900">{{ item.gift?.name || 'Unknown Gift' }}</h3>
+              <p class="text-sm text-primary-600 font-medium">{{ formatNaira(Number(item.gift?.discountPrice) || Number(item.gift?.price) || 0) }}</p>
             </div>
             <div class="flex items-center gap-3">
               <div class="flex items-center border border-slate-200 rounded-lg">

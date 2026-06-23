@@ -1,1 +1,0 @@
-import{I as e}from"./COVKT3T_.js";const g={getGifts:t=>e.get("/gifts",{params:t}),getGiftBySlug:t=>e.get(`/gifts/${t}`)},a=()=>({getGifts:async s=>(await g.getGifts(s)).data,getGiftBySlug:async s=>(await g.getGiftBySlug(s)).data});export{a as u};

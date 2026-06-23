@@ -6,5 +6,10 @@ export const useVendors = () => {
     return response.data;
   };
 
-  return { getVendors };
+  const getVendorBySlug = async (slug: string) => {
+    const response = await vendors_api.getVendorBySlug(slug);
+    return response.data;
+  };
+
+  return { getVendors, getVendorBySlug };
 };

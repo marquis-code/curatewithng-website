@@ -9,8 +9,9 @@ export const useCartStore = defineStore('cart', {
   getters: {
     totalItems: (state) => state.items.reduce((sum, item) => sum + item.quantity, 0),
     totalAmount: (state) => state.items.reduce((sum, item) => {
-      const price = item.gift.discountPrice || item.gift.price;
-      return sum + price * item.quantity;
+      const price = Number(item.gift?.discountPrice) || Number(item.gift?.price) || 0;
+      const quantity = Number(item.quantity) || 1;
+      return sum + (price * quantity);
     }, 0),
     isEmpty: (state) => state.items.length === 0,
   },

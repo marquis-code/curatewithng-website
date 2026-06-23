@@ -6,10 +6,13 @@
 
       <div class="flex flex-col sm:flex-row gap-4 mb-8">
         <input v-model="search" @input="debouncedFetch" type="text" placeholder="Search vendors..." class="input-field max-w-sm" />
-        <select v-model="category" @change="fetchVendors" class="input-field max-w-xs">
-          <option value="">All Categories</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
-        </select>
+        <UiCustomSelect 
+          v-model="category" 
+          @change="fetchVendors" 
+          :options="[{ label: 'All Categories', value: '' }, ...categories.map(c => ({ label: c.charAt(0).toUpperCase() + c.slice(1), value: c }))]"
+          placeholder="All Categories"
+          class="w-full max-w-xs"
+        />
       </div>
 
       <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -18,6 +21,15 @@
           <div class="skeleton-text mb-2"></div>
           <div class="skeleton-text w-2/3"></div>
         </div>
+      </div>
+
+      <div v-else-if="vendors.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
+        <div class="w-24 h-24 bg-primary-50 rounded-full flex items-center justify-center mb-6">
+          <Store class="w-12 h-12 text-primary-300" />
+        </div>
+        <h3 class="text-xl font-heading font-bold text-slate-900 mb-2">No vendors found</h3>
+        <p class="text-slate-500 max-w-md mb-8">We couldn't find any amazing vendors matching your search criteria. Try adjusting your filters!</p>
+        <button @click="search = ''; category = ''; fetchVendors()" class="btn-primary">Clear Filters</button>
       </div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -56,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { Star } from 'lucide-vue-next';
+import { Star, Store } from 'lucide-vue-next';
 import { useVendors } from '~/composables/modules/vendors/useVendors';
 import type { Vendor } from '~/types';
 
@@ -84,7 +96,8 @@ const fetchVendors = async () => {
     if (search.value) params.set('search', search.value);
     if (category.value) params.set('category', category.value);
     const result = await getVendors(Object.fromEntries(params.entries()));
-    vendors.value = result.data || result;
+    const payload = result.data || result;
+    vendors.value = Array.isArray(payload.data) ? payload.data : (Array.isArray(payload) ? payload : []);
   } catch {
     vendors.value = [];
   } finally {

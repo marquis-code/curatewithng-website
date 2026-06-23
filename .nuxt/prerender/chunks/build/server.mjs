@@ -462,14 +462,20 @@ function getRouteRules(arg) {
     return {};
   }
 }
+const __nuxt_page_meta$g = { layout: "default" };
+const __nuxt_page_meta$f = { layout: "default" };
+const __nuxt_page_meta$e = { layout: "default" };
+const __nuxt_page_meta$d = { layout: "default" };
+const __nuxt_page_meta$c = { layout: "default" };
+const __nuxt_page_meta$b = { layout: "default" };
 const __nuxt_page_meta$a = { layout: "default" };
 const __nuxt_page_meta$9 = { layout: "default" };
 const __nuxt_page_meta$8 = { layout: "default" };
-const __nuxt_page_meta$7 = { layout: "default" };
+const __nuxt_page_meta$7 = { layout: "auth" };
 const __nuxt_page_meta$6 = { layout: "default" };
 const __nuxt_page_meta$5 = { layout: "auth" };
 const __nuxt_page_meta$4 = { layout: "default" };
-const __nuxt_page_meta$3 = { layout: "auth" };
+const __nuxt_page_meta$3 = { layout: "default" };
 const __nuxt_page_meta$2 = { layout: "default" };
 const __nuxt_page_meta$1 = { layout: "default" };
 const __nuxt_page_meta = { layout: "auth" };
@@ -477,68 +483,104 @@ const _routes = [
   {
     name: "cart",
     path: "/cart",
-    meta: __nuxt_page_meta$a || {},
-    component: () => import('./cart-Cz9p-LVp.mjs')
+    meta: __nuxt_page_meta$g || {},
+    component: () => import('./cart-Cjrq_wQx.mjs')
+  },
+  {
+    name: "about",
+    path: "/about",
+    meta: __nuxt_page_meta$f || {},
+    component: () => import('./about-BblXhNzn.mjs')
   },
   {
     name: "index",
     path: "/",
-    meta: __nuxt_page_meta$9 || {},
-    component: () => import('./index-Znf5SF87.mjs')
+    meta: __nuxt_page_meta$e || {},
+    component: () => import('./index-DONDxp0x.mjs')
+  },
+  {
+    name: "terms",
+    path: "/terms",
+    meta: __nuxt_page_meta$d || {},
+    component: () => import('./terms-DqAsikVT.mjs')
   },
   {
     name: "curate",
     path: "/curate",
-    meta: __nuxt_page_meta$8 || {},
-    component: () => import('./curate-BDz7GrKW.mjs')
+    meta: __nuxt_page_meta$c || {},
+    component: () => import('./curate-CXATpUDy.mjs')
+  },
+  {
+    name: "contact",
+    path: "/contact",
+    meta: __nuxt_page_meta$b || {},
+    component: () => import('./contact-BBRF5td1.mjs')
   },
   {
     name: "explore",
     path: "/explore",
-    meta: __nuxt_page_meta$7 || {},
-    component: () => import('./explore-t0v-oJ7n.mjs')
+    meta: __nuxt_page_meta$a || {},
+    component: () => import('./explore-23UMqPhS.mjs')
+  },
+  {
+    name: "privacy",
+    path: "/privacy",
+    meta: __nuxt_page_meta$9 || {},
+    component: () => import('./privacy-BNQhii7P.mjs')
   },
   {
     name: "checkout",
     path: "/checkout",
-    meta: { ...__nuxt_page_meta$6 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./checkout-DKifdK09.mjs')
+    meta: { ...__nuxt_page_meta$8 || {}, ...{ "middleware": "auth" } },
+    component: () => import('./checkout-D3AWL1q-.mjs')
   },
   {
     name: "auth-login",
     path: "/auth/login",
-    meta: __nuxt_page_meta$5 || {},
-    component: () => import('./login-CWSnFfTt.mjs')
+    meta: __nuxt_page_meta$7 || {},
+    component: () => import('./login-CG_6N_oG.mjs')
   },
   {
     name: "gifts-slug",
     path: "/gifts/:slug()",
-    meta: __nuxt_page_meta$4 || {},
-    component: () => import('./_slug_-D7fyYKWb.mjs')
+    meta: __nuxt_page_meta$6 || {},
+    component: () => import('./_slug_-DWBPGUGh.mjs')
   },
   {
     name: "auth-register",
     path: "/auth/register",
-    meta: __nuxt_page_meta$3 || {},
-    component: () => import('./register-CplsiZCK.mjs')
+    meta: __nuxt_page_meta$5 || {},
+    component: () => import('./register-GtMrVBIj.mjs')
+  },
+  {
+    name: "refund-policy",
+    path: "/refund-policy",
+    meta: __nuxt_page_meta$4 || {},
+    component: () => import('./refund-policy-DMtlx-JG.mjs')
   },
   {
     name: "vendors",
     path: "/vendors",
+    meta: __nuxt_page_meta$3 || {},
+    component: () => import('./index-C7sP94_3.mjs')
+  },
+  {
+    name: "vendors-slug",
+    path: "/vendors/:slug()",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./index-DfzSx8W8.mjs')
+    component: () => import('./_slug_-B7Cy-X_V.mjs')
   },
   {
     name: "dashboard",
     path: "/dashboard",
     meta: { ...__nuxt_page_meta$1 || {}, ...{ "middleware": "auth" } },
-    component: () => import('./index-DlKklhJu.mjs')
+    component: () => import('./index-Bn26_8GS.mjs')
   },
   {
     name: "auth-forgot-password",
     path: "/auth/forgot-password",
     meta: __nuxt_page_meta || {},
-    component: () => import('./forgot-password-Czmmhwg1.mjs')
+    component: () => import('./forgot-password-BeT2C_yY.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -683,7 +725,7 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  auth: () => import('./auth-DTiGIp6D.mjs')
+  auth: () => import('./auth-CHfyKCHH.mjs')
 };
 Object.assign(/* @__PURE__ */ Object.create(null), {});
 const pageIslandRoutes = Object.assign(/* @__PURE__ */ Object.create(null), {});
@@ -1690,7 +1732,7 @@ const plugins = [
 ];
 const layouts = {
   auth: defineAsyncComponent(() => import('./auth-BuU9T6Jw.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-C7S-WWwt.mjs').then((m) => m.default || m))
+  default: defineAsyncComponent(() => import('./default-DOB9UPTL.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({
@@ -1928,19 +1970,14 @@ function normalizeSlot(slot, data) {
   return slotContent.length === 1 ? h(slotContent[0]) : h(Fragment, void 0, slotContent);
 }
 const useUser = () => {
-  const token = useCookie("token", { default: () => null });
   const user = useCookie("user_data", { default: () => null });
   const logOut = () => {
-    token.value = null;
     user.value = null;
-  };
-  const setToken = (newToken) => {
-    token.value = newToken;
   };
   const setUser = (userData) => {
     user.value = userData;
   };
-  return { token, user, logOut, setToken, setUser };
+  return { user, logOut, setUser };
 };
 const useCustomToast = () => {
   const showToast = ({ title, message, toastType, duration = 3e3 }) => {
@@ -1959,10 +1996,12 @@ const getBaseUrl = () => {
 const cleanBaseUrl = getBaseUrl().replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
 const $GATEWAY_ENDPOINT = `${cleanBaseUrl}`;
 const GATEWAY_ENDPOINT = axios.create({
-  baseURL: $GATEWAY_ENDPOINT
+  baseURL: $GATEWAY_ENDPOINT,
+  withCredentials: true
 });
 const GATEWAY_ENDPOINT_WITH_AUTH = axios.create({
-  baseURL: $GATEWAY_ENDPOINT
+  baseURL: $GATEWAY_ENDPOINT,
+  withCredentials: true
 });
 const instanceArray = [
   GATEWAY_ENDPOINT,
@@ -1970,15 +2009,6 @@ const instanceArray = [
 ];
 instanceArray.forEach((instance) => {
   instance.interceptors.request.use((config) => {
-    if (instance === GATEWAY_ENDPOINT_WITH_AUTH) {
-      try {
-        const { token } = useUser();
-        if (token.value) {
-          config.headers.Authorization = `Bearer ${token.value}`;
-        }
-      } catch (e) {
-      }
-    }
     return config;
   });
   instance.interceptors.response.use(
@@ -2060,22 +2090,19 @@ const auth_api = {
   }
 };
 const useAuth = () => {
-  const { setToken, setUser } = useUser();
+  const { setUser } = useUser();
   const login = async (payload) => {
     const response = await auth_api.login(payload);
-    setToken(response.data.accessToken);
     setUser(response.data.user);
     return response.data;
   };
   const register = async (payload) => {
     const response = await auth_api.register(payload);
-    setToken(response.data.accessToken);
     setUser(response.data.user);
     return response.data;
   };
   const firebaseGoogleLogin = async (payload) => {
     const response = await auth_api.firebaseGoogleLogin(payload);
-    setToken(response.data.accessToken);
     setUser(response.data.user);
     return response.data;
   };
@@ -2231,5 +2258,5 @@ let entry;
 }
 const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { useSeoMeta as a, useAuth as b, useRoute as c, useUser as d, entry_default as default, defineNuxtRouteMiddleware as e, useCookie as f, defineStore as g, useRouter as h, encodeRoutePath as i, useNuxtApp as j, useRuntimeConfig as k, nuxtLinkDefaults as l, navigateTo as n, resolveRouteObject as r, useHead as u };
+export { GATEWAY_ENDPOINT as G, useSeoMeta as a, useAuth as b, useRoute as c, useUser as d, entry_default as default, defineNuxtRouteMiddleware as e, useCookie as f, defineStore as g, useRouter as h, encodeRoutePath as i, useNuxtApp as j, useRuntimeConfig as k, nuxtLinkDefaults as l, navigateTo as n, resolveRouteObject as r, useHead as u };
 //# sourceMappingURL=server.mjs.map

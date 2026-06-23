@@ -17,11 +17,11 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 });
 
-const { token } = useUser();
+const { user } = useUser();
 const { fetchProfile } = useAuth();
 
 onMounted(async () => {
-  if (token.value) {
+  if (user.value) {
     try {
       await fetchProfile();
     } catch {}

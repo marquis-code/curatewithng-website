@@ -4,10 +4,13 @@
     <p class="text-slate-500 text-center mb-8">Enter your email to receive a password reset link.</p>
 
     <form @submit.prevent="handleReset" class="space-y-4">
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Email</label>
-        <input v-model="email" type="email" required class="input-field" placeholder="you@example.com" />
-      </div>
+      <UiCustomInput
+        v-model="email"
+        type="email"
+        required
+        label="Email"
+        placeholder="you@example.com"
+      />
       
       <button type="submit" :disabled="loading" class="btn-primary w-full flex items-center justify-center gap-2">
         <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />

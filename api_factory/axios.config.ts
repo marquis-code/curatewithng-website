@@ -18,10 +18,12 @@ const $GATEWAY_ENDPOINT = `${cleanBaseUrl}`;
 
 export const GATEWAY_ENDPOINT = axios.create({
   baseURL: $GATEWAY_ENDPOINT,
+  withCredentials: true,
 });
 
 export const GATEWAY_ENDPOINT_WITH_AUTH = axios.create({
   baseURL: $GATEWAY_ENDPOINT,
+  withCredentials: true,
 });
 
 export interface CustomAxiosResponse extends AxiosResponse {
@@ -36,24 +38,6 @@ const instanceArray = [
 
 instanceArray.forEach((instance) => {
   instance.interceptors.request.use((config: any) => {
-    if (instance === GATEWAY_ENDPOINT_WITH_AUTH) {
-      // In Nuxt, we need to be careful accessing composables inside async interceptors if outside context,
-      // but useCookie works inside component setup.
-      try {
-        const { token } = useUser();
-        if (token.value) {
-          config.headers.Authorization = `Bearer ${token.value}`;
-        }
-      } catch (e) {
-        // Fallback for client side if outside context
-        if (import.meta.client) {
-          const match = document.cookie.match(/(^| )token=([^;]+)/);
-          if (match) {
-            config.headers.Authorization = `Bearer ${decodeURIComponent(match[2])}`;
-          }
-        }
-      }
-    }
     return config;
   });
 

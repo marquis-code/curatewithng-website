@@ -1,31 +1,45 @@
 <template>
-  <div class="card p-8 animate-scale-in">
+  <div class="bg-white rounded-[2rem] border border-slate-100 p-8 md:p-10 animate-scale-in max-w-md mx-auto">
     <h2 class="text-2xl font-heading font-bold text-slate-900 text-center mb-2">Create Account</h2>
     <p class="text-slate-500 text-center mb-8">Join CurateWithNG and start gifting smarter</p>
 
     <form @submit.prevent="handleRegister" class="space-y-4">
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="text-sm font-medium text-slate-700 mb-1 block">First Name</label>
-          <input v-model="form.firstName" type="text" required class="input-field" placeholder="Chidi" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-slate-700 mb-1 block">Last Name</label>
-          <input v-model="form.lastName" type="text" required class="input-field" placeholder="Okonkwo" />
-        </div>
+        <UiCustomInput
+          v-model="form.firstName"
+          required
+          label="First Name"
+          placeholder="Chidi"
+        />
+        <UiCustomInput
+          v-model="form.lastName"
+          required
+          label="Last Name"
+          placeholder="Okonkwo"
+        />
       </div>
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Email</label>
-        <input v-model="form.email" type="email" required class="input-field" placeholder="you@example.com" />
-      </div>
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Phone (optional)</label>
-        <input v-model="form.phone" type="tel" class="input-field" placeholder="+234 801 234 5678" />
-      </div>
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Password</label>
-        <input v-model="form.password" type="password" required minlength="8" class="input-field" placeholder="At least 8 characters" />
-      </div>
+      <UiCustomInput
+        v-model="form.email"
+        type="email"
+        required
+        label="Email"
+        placeholder="you@example.com"
+      />
+      <UiPhoneInput
+        v-model="form.phone"
+        label="Phone (optional)"
+        placeholder="801 234 5678"
+      />
+      <UiCustomInput
+        v-model="form.password"
+        type="password"
+        required
+        minlength="8"
+        pattern=".{8,}"
+        title="Password must be at least 8 characters long"
+        label="Password"
+        placeholder="At least 8 characters"
+      />
       <button type="submit" :disabled="loading" class="btn-primary w-full">
         {{ loading ? 'Creating account...' : 'Create Account' }}
       </button>
@@ -45,6 +59,8 @@
     <p class="text-center text-sm text-slate-500 mt-6">
       Already have an account? <NuxtLink to="/auth/login" class="text-primary-800 font-semibold hover:underline">Sign in</NuxtLink>
     </p>
+
+    <CelebrationModal :show="showCelebration" />
   </div>
 </template>
 
@@ -53,10 +69,39 @@ definePageMeta({ layout: 'auth' });
 useHead({ title: 'Create Account — CurateWithNG' });
 
 import { useAuth } from '~/composables/modules/auth/useAuth';
+import confetti from 'canvas-confetti';
+import CelebrationModal from '~/components/ui/CelebrationModal.vue';
 
 const config = useRuntimeConfig();
 const { register, firebaseGoogleLogin } = useAuth();
 const loading = ref(false);
+const showCelebration = ref(false);
+
+const fireConfetti = () => {
+  const duration = 3000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 5,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: ['#6B21A8', '#A855F7', '#D8B4FE', '#ffffff']
+    });
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: ['#6B21A8', '#A855F7', '#D8B4FE', '#ffffff']
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }());
+};
 
 const form = reactive({
   firstName: '',
@@ -70,10 +115,18 @@ const handleRegister = async () => {
   loading.value = true;
   try {
     await register(form);
-    navigateTo('/dashboard');
+    
+    // Celebration effect
+    showCelebration.value = true;
+    fireConfetti();
+    
+    setTimeout(() => {
+      showCelebration.value = false;
+      navigateTo('/dashboard');
+    }, 4500);
+
   } catch (e: any) {
     alert(e.data?.message || 'Registration failed. Please try again.');
-  } finally {
     loading.value = false;
   }
 };
@@ -89,10 +142,18 @@ const handleGoogleLogin = async () => {
     const idToken = await result.user.getIdToken();
     
     await firebaseGoogleLogin({ token: idToken });
-    navigateTo('/dashboard');
+    
+    // Check if new user isn't easily doable here, so we will celebrate anyway for Google login
+    showCelebration.value = true;
+    fireConfetti();
+    
+    setTimeout(() => {
+      showCelebration.value = false;
+      navigateTo('/dashboard');
+    }, 4500);
+
   } catch (e: any) {
     alert(e.message || 'Google Login failed');
-  } finally {
     loading.value = false;
   }
 };

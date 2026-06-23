@@ -47,19 +47,25 @@
           <!-- Orders -->
           <div v-if="activeTab === 'orders'" class="card p-6">
             <h3 class="font-heading font-bold text-slate-900 mb-6">My Orders</h3>
-            <div class="text-center py-12 text-slate-500">
-              <Package class="w-10 h-10 mx-auto mb-3 text-slate-400" />
-              <p>Your orders will appear here</p>
-              <NuxtLink to="/explore" class="btn-primary mt-4 inline-block">Start Shopping</NuxtLink>
+            <div class="flex flex-col items-center justify-center py-16 text-center">
+              <div class="w-24 h-24 bg-primary-50 rounded-full flex items-center justify-center mb-6">
+                <Package class="w-12 h-12 text-primary-300" />
+              </div>
+              <h3 class="text-lg font-heading font-bold text-slate-900 mb-2">No orders yet</h3>
+              <p class="text-slate-500 max-w-sm mb-6">You haven't placed any orders. Start exploring to find the perfect gift for someone special!</p>
+              <NuxtLink to="/explore" class="btn-primary inline-block">Start Shopping</NuxtLink>
             </div>
           </div>
 
           <!-- Wishlist -->
           <div v-if="activeTab === 'wishlist'" class="card p-6">
             <h3 class="font-heading font-bold text-slate-900 mb-6">Saved Gifts</h3>
-            <div class="text-center py-12 text-slate-500">
-              <Heart class="w-10 h-10 mx-auto mb-3 text-slate-400" />
-              <p>Save gifts you love for later</p>
+            <div class="flex flex-col items-center justify-center py-16 text-center">
+              <div class="w-24 h-24 bg-pink-50 rounded-full flex items-center justify-center mb-6">
+                <Heart class="w-12 h-12 text-pink-300" />
+              </div>
+              <h3 class="text-lg font-heading font-bold text-slate-900 mb-2">Your wishlist is empty</h3>
+              <p class="text-slate-500 max-w-sm">Save gifts you love for later by clicking the heart icon on any gift.</p>
             </div>
           </div>
 
@@ -67,10 +73,13 @@
           <div v-if="activeTab === 'recipients'" class="card p-6">
             <h3 class="font-heading font-bold text-slate-900 mb-6">My Recipients</h3>
             <p class="text-slate-500 mb-4">Save recipient profiles for faster curation</p>
-            <div class="text-center py-12 text-slate-500">
-              <Users class="w-10 h-10 mx-auto mb-3 text-slate-400" />
-              <p>Add your first recipient</p>
-              <button class="btn-primary mt-4">Add Recipient</button>
+            <div class="flex flex-col items-center justify-center py-12 text-center">
+              <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                <Users class="w-12 h-12 text-blue-300" />
+              </div>
+              <h3 class="text-lg font-heading font-bold text-slate-900 mb-2">No recipients saved</h3>
+              <p class="text-slate-500 max-w-sm mb-6">Add your first recipient to make AI curation even faster next time.</p>
+              <button class="btn-primary mt-2">Add Recipient</button>
             </div>
           </div>
         </div>

@@ -1,54 +1,109 @@
 <template>
-  <div>
+  <main class="relative z-10">
     <!-- Hero Section -->
-    <section class="relative bg-gradient-hero overflow-hidden">
-      <!-- Decorative elements -->
-      <div class="absolute inset-0">
-        <div class="absolute top-20 left-10 w-72 h-72 bg-primary-600/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-10 right-20 w-96 h-96 bg-accent-600/10 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/5 rounded-full blur-3xl"></div>
-      </div>
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-slate-50 bg-dotted py-16 md:py-8">
+      <div class="section-container relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <!-- Text Content -->
+          <div class="max-w-xl">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in">
+              <span class="text-primary-800">✨ Powered by AI</span>
+              <span class="text-slate-300">•</span>
+              <span>Nigeria's Gift Curator</span>
+            </div>
 
-      <div class="section-container relative z-10 py-24 md:py-32 lg:py-40">
-        <div class="max-w-3xl mx-auto text-center">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 mb-8 animate-fade-in">
-            <span class="text-accent-400 text-sm">✨ Powered by AI</span>
-            <span class="text-white/60 text-sm">•</span>
-            <span class="text-white/80 text-sm">Nigeria's Gift Curator</span>
+            <h1 class="font-heading text-4xl md:text-5xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-6 animate-slide-up">
+              The Smartest Way to
+              <span class="text-primary-800">Gift in Nigeria</span>
+            </h1>
+
+            <p class="text-lg text-slate-600 leading-relaxed mb-10 animate-slide-up" style="animation-delay: 0.1s">
+              Tell our AI about your recipient, and we'll curate the perfect gift from Nigeria's finest vendors. Birthdays, weddings, corporate — we've got you covered.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 animate-slide-up" style="animation-delay: 0.2s">
+              <NuxtLink to="/curate" class="btn-primary inline-flex items-center justify-center gap-2">
+                <Sparkles class="w-4 h-4" />
+                Start AI Curation
+              </NuxtLink>
+              <NuxtLink to="/explore" class="btn-secondary inline-flex items-center justify-center">
+                Explore Gifts
+              </NuxtLink>
+            </div>
+            
+            <!-- Stats -->
+            <div class="flex gap-8 md:gap-12 mt-12 pt-12 border-t border-slate-200 animate-fade-in" style="animation-delay: 0.4s">
+              <div>
+                <div class="text-2xl font-heading font-bold text-slate-900">500+</div>
+                <div class="text-sm text-slate-500 font-medium">Curated Gifts</div>
+              </div>
+              <div>
+                <div class="text-2xl font-heading font-bold text-slate-900">50+</div>
+                <div class="text-sm text-slate-500 font-medium">Local Vendors</div>
+              </div>
+              <div>
+                <div class="text-2xl font-heading font-bold text-slate-900">98%</div>
+                <div class="text-sm text-slate-500 font-medium">Happy Recipients</div>
+              </div>
+            </div>
           </div>
 
-          <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 animate-slide-up">
-            The Smartest Way to
-            <span class="text-gradient bg-gradient-to-r from-accent-400 to-accent-300 bg-clip-text text-transparent"> Gift in Nigeria</span>
-          </h1>
+          <!-- Image Storytelling Showcase -->
+          <div class="relative h-[400px] lg:h-[600px] animate-fade-in group" style="animation-delay: 0.3s">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary-100 to-accent-100 rounded-[2rem] transform rotate-3 scale-105 transition-transform duration-700 group-hover:rotate-2 group-hover:scale-100"></div>
+            
+            <div class="relative w-full h-full rounded-[2rem] border border-slate-200 overflow-hidden shadow-xl bg-slate-900">
+              <!-- Images -->
+              <transition-group name="story-fade" tag="div" class="absolute inset-0">
+                <div v-for="(story, index) in heroStories" :key="index" v-show="activeStory === index" class="absolute inset-0">
+                  <img 
+                    :src="story.image" 
+                    :alt="story.title" 
+                    class="w-full h-full object-cover transform transition-transform duration-[4000ms] ease-linear"
+                    :class="activeStory === index ? 'scale-110' : 'scale-100'"
+                  />
+                  <!-- Gradient Overlay -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent"></div>
+                </div>
+              </transition-group>
 
-          <p class="text-lg md:text-xl text-slate-300 leading-relaxed mb-10 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.1s">
-            Tell our AI about your recipient, and we'll curate the perfect gift from Nigeria's finest vendors. Birthdays, weddings, corporate — we've got you covered.
-          </p>
+              <!-- Progress Bars -->
+              <div class="absolute top-4 left-4 right-4 flex gap-2 z-20">
+                <button 
+                  v-for="(story, index) in heroStories" 
+                  :key="'nav-'+index"
+                  @click="setStory(index)"
+                  class="flex-1 h-1.5 rounded-full overflow-hidden bg-white/30 backdrop-blur-sm cursor-pointer hover:h-2 transition-all"
+                >
+                  <div 
+                    class="h-full bg-white"
+                    :class="{ 
+                      'w-full': index < activeStory, 
+                      'w-0': index > activeStory,
+                      'story-progress': index === activeStory 
+                    }"
+                  ></div>
+                </button>
+              </div>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.2s">
-            <NuxtLink to="/curate" class="btn-accent text-lg !py-4 !px-8 inline-flex items-center justify-center gap-2">
-              <Sparkles class="w-5 h-5" />
-              Start AI Curation
-            </NuxtLink>
-            <NuxtLink to="/explore" class="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold transition-all hover:bg-white/10 text-lg inline-flex items-center justify-center">
-              Explore Gifts
-            </NuxtLink>
-          </div>
+              <!-- Story Text -->
+              <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
+                <transition name="slide-up" mode="out-in">
+                  <div :key="activeStory">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider mb-4 border border-white/20">
+                      Step {{ activeStory + 1 }}
+                    </div>
+                    <h3 class="font-heading font-extrabold text-white text-3xl md:text-4xl mb-2">{{ heroStories[activeStory].title }}</h3>
+                    <p class="text-white/90 text-lg md:text-xl">{{ heroStories[activeStory].description }}</p>
+                  </div>
+                </transition>
+              </div>
 
-          <!-- Stats -->
-          <div class="flex justify-center gap-8 md:gap-16 mt-16 animate-fade-in" style="animation-delay: 0.4s">
-            <div class="text-center">
-              <div class="text-2xl md:text-3xl font-heading font-bold text-white">500+</div>
-              <div class="text-sm text-slate-400">Curated Gifts</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl md:text-3xl font-heading font-bold text-white">50+</div>
-              <div class="text-sm text-slate-400">Local Vendors</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl md:text-3xl font-heading font-bold text-white">98%</div>
-              <div class="text-sm text-slate-400">Happy Recipients</div>
+              <!-- Navigation Overlays (Click sides to advance) -->
+              <div class="absolute inset-0 flex z-10">
+                <button @click="setStory((activeStory - 1 + heroStories.length) % heroStories.length)" class="flex-1 cursor-pointer focus:outline-none"></button>
+                <button @click="setStory((activeStory + 1) % heroStories.length)" class="flex-1 cursor-pointer focus:outline-none"></button>
+              </div>
             </div>
           </div>
         </div>
@@ -56,8 +111,8 @@
     </section>
 
     <!-- How It Works -->
-    <section class="py-20 bg-white">
-      <div class="section-container">
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-white py-20 md:py-8">
+      <div class="section-container relative z-10">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">How It Works</h2>
           <p class="text-lg text-slate-500 max-w-2xl mx-auto">Three simple steps to the perfect gift</p>
@@ -78,33 +133,34 @@
     </section>
 
     <!-- Gift Categories -->
-    <section class="py-20 bg-slate-50">
-      <div class="section-container">
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-slate-50 py-20 md:py-8">
+      <div class="section-container relative z-10">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">Browse by Category</h2>
           <p class="text-lg text-slate-500">Find the perfect gift for every occasion</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           <NuxtLink
             v-for="cat in categories"
             :key="cat.slug"
             :to="`/explore?category=${cat.slug}`"
-            class="card-interactive p-6 text-center group"
+            class="group relative h-48 md:h-64 rounded-3xl overflow-hidden cursor-pointer"
           >
-            <div class="mb-3 flex justify-center text-slate-700">
-              <component :is="cat.icon" class="w-10 h-10" />
+            <img :src="cat.image" :alt="cat.name" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+              <h3 class="font-heading font-bold text-white text-lg md:text-xl mb-1">{{ cat.name }}</h3>
+              <p class="text-sm text-slate-300">{{ cat.count }}+ gifts</p>
             </div>
-            <h3 class="font-heading font-semibold text-slate-900 group-hover:text-primary-800 transition-colors">{{ cat.name }}</h3>
-            <p class="text-sm text-slate-400 mt-1">{{ cat.count }}+ gifts</p>
           </NuxtLink>
         </div>
       </div>
     </section>
 
     <!-- AI Feature Spotlight -->
-    <section class="py-20 bg-white">
-      <div class="section-container">
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-white py-20 md:py-8">
+      <div class="section-container relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 text-primary-800 text-sm font-semibold mb-6">
@@ -158,21 +214,24 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="py-20 bg-slate-50">
-      <div class="section-container">
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-slate-50 overflow-clip py-20 md:py-8">
+      <div class="section-container relative z-10">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">Loved by Nigerians</h2>
           <p class="text-lg text-slate-500">See what our customers are saying</p>
         </div>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div v-for="(testimonial, i) in testimonials" :key="i" class="card p-6">
+      <!-- Infinite Marquee -->
+      <div class="relative flex overflow-hidden">
+        <div class="marquee-container gap-6 py-4 px-3 flex">
+          <div v-for="(testimonial, i) in [...testimonials, ...testimonials, ...testimonials, ...testimonials]" :key="i" class="w-80 md:w-96 flex-shrink-0 card p-6 whitespace-normal">
             <div class="flex items-center gap-1 mb-4">
               <Star v-for="s in 5" :key="s" class="w-4 h-4 text-accent-500 fill-current" />
             </div>
             <p class="text-slate-600 leading-relaxed mb-4">"{{ testimonial.text }}"</p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
+              <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
                 <span class="text-primary-800 font-bold text-sm">{{ testimonial.name.charAt(0) }}</span>
               </div>
               <div>
@@ -185,28 +244,111 @@
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-hero">
-      <div class="section-container text-center">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Ready to Gift Smarter?</h2>
-        <p class="text-lg text-slate-300 mb-8 max-w-xl mx-auto">Join thousands of Nigerians who trust CurateWithNG for meaningful, curated gifts.</p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <NuxtLink to="/auth/register" class="btn-accent text-lg !py-4 !px-8">Create Free Account</NuxtLink>
-          <NuxtLink to="/curate" class="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all text-lg">Try AI Curator</NuxtLink>
+    <!-- Vendor Ad Section -->
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-white py-24 md:py-8">
+      <div class="section-container relative z-10">
+        <div class="bg-slate-900 rounded-[2rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+          <div class="p-12 md:p-16 flex flex-col justify-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-white text-xs font-bold uppercase tracking-wider mb-6 w-fit">
+              Partner With Us
+            </div>
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
+              Grow Your Gifting Business
+            </h2>
+            <p class="text-lg text-slate-300 leading-relaxed mb-8">
+              Join CurateWithNG as a curated vendor. Reach thousands of shoppers looking for high-quality, beautifully packaged gifts and hampers. We handle the AI matching, you handle the magic.
+            </p>
+            <a href="https://vendor.curatewithng.com" class="btn-primary w-fit !bg-white !text-slate-900 hover:!bg-slate-100">
+              Become a Vendor Today
+            </a>
+          </div>
+          <div class="relative h-64 lg:h-auto">
+            <img 
+              src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=2000&auto=format&fit=crop" 
+              alt="Vendor packaging gifts" 
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>
-  </div>
+
+    <!-- CTA Section -->
+    <section class="md:sticky md:top-[80px] min-h-[calc(100vh-80px)] flex flex-col justify-center bg-slate-50 bg-dotted py-20 md:py-8">
+      <div class="section-container relative z-10">
+        <div class="bg-white rounded-[3rem] border border-slate-200 p-12 md:p-20 text-center relative overflow-hidden shadow-sm">
+          <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop')] opacity-5 bg-cover bg-center"></div>
+          <div class="relative z-10 max-w-2xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-heading font-extrabold text-slate-900 mb-6">Ready to Gift Smarter?</h2>
+            <p class="text-xl text-slate-500 mb-10">Join thousands of Nigerians who trust CurateWithNG for meaningful, curated gifts.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <NuxtLink to="/auth/register" class="btn-primary !py-3 !px-8">Create Free Account</NuxtLink>
+              <NuxtLink to="/curate" class="border-2 border-slate-200 text-slate-700 bg-white px-8 py-3 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-all">Try AI Curator</NuxtLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
 import { Sparkles, Check, ArrowRight, Star, User, Gift, ShoppingBag, Heart, Home, Briefcase } from 'lucide-vue-next';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 definePageMeta({ layout: 'default' });
 
 useHead({
   title: 'CurateWithNG — The Smartest Way to Gift in Nigeria',
 });
+
+// --- Storytelling Hero Data ---
+const heroStories = [
+  {
+    image: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=2000&auto=format&fit=crop',
+    title: 'The Intention',
+    description: 'You want to make them feel truly special.'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1531315630201-bb15abeb1653?q=80&w=2000&auto=format&fit=crop',
+    title: 'The AI Match',
+    description: 'GiftGenius analyzes their persona and occasion.'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop',
+    title: 'The Curation',
+    description: 'Sourced from Nigeria\'s finest bespoke vendors.'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=2000&auto=format&fit=crop',
+    title: 'The Moment',
+    description: 'Delivering unforgettable joy and connection.'
+  }
+];
+
+const activeStory = ref(0);
+let storyInterval: ReturnType<typeof setInterval>;
+
+const startStoryInterval = () => {
+  storyInterval = setInterval(() => {
+    activeStory.value = (activeStory.value + 1) % heroStories.length;
+  }, 4000);
+};
+
+onMounted(() => {
+  startStoryInterval();
+});
+
+onUnmounted(() => {
+  if (storyInterval) clearInterval(storyInterval);
+});
+
+const setStory = (index: number) => {
+  activeStory.value = index;
+  clearInterval(storyInterval);
+  startStoryInterval();
+};
+// ------------------------------
 
 const steps = [
   { icon: User, title: 'Describe Your Recipient', description: 'Tell us who the gift is for — their interests, the occasion, and your budget.', bgClass: 'bg-primary-50' },
@@ -215,14 +357,14 @@ const steps = [
 ];
 
 const categories = [
-  { name: 'Gift Hampers', slug: 'hampers', icon: ShoppingBag, count: 80 },
-  { name: 'Fashion', slug: 'fashion', icon: ShoppingBag, count: 120 },
-  { name: 'Experiences', slug: 'experiences', icon: Star, count: 45 },
-  { name: 'Wellness', slug: 'wellness', icon: Heart, count: 60 },
-  { name: 'Tech & Gadgets', slug: 'tech', icon: ShoppingBag, count: 55 },
-  { name: 'Home & Living', slug: 'home', icon: Home, count: 70 },
-  { name: 'Jewellery', slug: 'jewellery', icon: Star, count: 40 },
-  { name: 'Corporate', slug: 'corporate', icon: Briefcase, count: 35 },
+  { name: 'Gift Hampers', slug: 'hampers', image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80', count: 80 },
+  { name: 'Fashion', slug: 'fashion', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80', count: 120 },
+  { name: 'Experiences', slug: 'experiences', image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&q=80', count: 45 },
+  { name: 'Wellness', slug: 'wellness', image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80', count: 60 },
+  { name: 'Tech & Gadgets', slug: 'tech', image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&q=80', count: 55 },
+  { name: 'Home & Living', slug: 'home', image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80', count: 70 },
+  { name: 'Jewellery', slug: 'jewellery', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80', count: 40 },
+  { name: 'Corporate', slug: 'corporate', image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80', count: 35 },
 ];
 
 const aiFeatures = [
@@ -244,3 +386,37 @@ const testimonials = [
   { name: 'Chidinma E.', location: 'Port Harcourt', text: 'Found the most beautiful jewellery set for my best friend\'s wedding. The AI recommendation was spot on!' },
 ];
 </script>
+
+<style scoped>
+.marquee-container {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-container:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Story Transitions */
+.story-fade-enter-active,
+.story-fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+.story-fade-enter-from,
+.story-fade-leave-to {
+  opacity: 0;
+}
+
+.story-progress {
+  animation: fillProgress 4s linear forwards;
+}
+
+@keyframes fillProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+</style>

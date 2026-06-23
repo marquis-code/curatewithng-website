@@ -12,52 +12,56 @@
         <aside class="hidden lg:block w-64 flex-shrink-0">
           <div class="sticky top-24 space-y-6">
             <!-- Search -->
-            <div>
-              <label class="text-sm font-semibold text-slate-700 mb-2 block">Search</label>
-              <input v-model="filters.search" @input="debouncedFetch" type="text" placeholder="Search gifts..." class="input-field !py-2.5 text-sm" />
-            </div>
+            <UiCustomInput
+              v-model="filters.search"
+              @input="debouncedFetch"
+              placeholder="Search gifts..."
+              label="Search"
+            />
 
             <!-- Category -->
-            <div>
-              <label class="text-sm font-semibold text-slate-700 mb-2 block">Category</label>
-              <select v-model="filters.category" @change="fetchGifts" class="input-field !py-2.5 text-sm">
-                <option value="">All Categories</option>
-                <option v-for="cat in categoryOptions" :key="cat" :value="cat">{{ cat }}</option>
-              </select>
-            </div>
+            <UiCustomSelect
+              v-model="filters.category"
+              :options="categoryOptions"
+              @change="fetchGifts"
+              placeholder="All Categories"
+              label="Category"
+            />
 
             <!-- Occasion -->
-            <div>
-              <label class="text-sm font-semibold text-slate-700 mb-2 block">Occasion</label>
-              <select v-model="filters.occasion" @change="fetchGifts" class="input-field !py-2.5 text-sm">
-                <option value="">All Occasions</option>
-                <option v-for="occ in occasionOptions" :key="occ" :value="occ">{{ occ }}</option>
-              </select>
-            </div>
+            <UiCustomSelect
+              v-model="filters.occasion"
+              :options="occasionOptions"
+              @change="fetchGifts"
+              placeholder="All Occasions"
+              label="Occasion"
+            />
 
             <!-- Recipient -->
-            <div>
-              <label class="text-sm font-semibold text-slate-700 mb-2 block">Gift For</label>
-              <select v-model="filters.recipientType" @change="fetchGifts" class="input-field !py-2.5 text-sm">
-                <option value="">Anyone</option>
-                <option v-for="r in recipientOptions" :key="r" :value="r">{{ r }}</option>
-              </select>
-            </div>
+            <UiCustomSelect
+              v-model="filters.recipientType"
+              :options="recipientOptions"
+              @change="fetchGifts"
+              placeholder="Anyone"
+              label="Gift For"
+            />
 
             <!-- Budget -->
-            <div>
-              <label class="text-sm font-semibold text-slate-700 mb-2 block">Budget Tier</label>
-              <select v-model="filters.budgetTier" @change="fetchGifts" class="input-field !py-2.5 text-sm">
-                <option value="">All Budgets</option>
-                <option value="BUDGET">Budget (under ₦20k)</option>
-                <option value="MID">Mid-range (₦20k–₦50k)</option>
-                <option value="PREMIUM">Premium (₦50k–₦150k)</option>
-                <option value="LUXURY">Luxury (₦150k+)</option>
-              </select>
-            </div>
+            <UiCustomSelect
+              v-model="filters.budgetTier"
+              :options="[
+                { label: 'Budget (under ₦20k)', value: 'BUDGET' },
+                { label: 'Mid-range (₦20k–₦50k)', value: 'MID' },
+                { label: 'Premium (₦50k–₦150k)', value: 'PREMIUM' },
+                { label: 'Luxury (₦150k+)', value: 'LUXURY' }
+              ]"
+              @change="fetchGifts"
+              placeholder="All Budgets"
+              label="Budget Tier"
+            />
 
             <!-- Reset -->
-            <button @click="resetFilters" class="text-sm text-primary-800 font-medium hover:underline">Reset Filters</button>
+            <button @click="resetFilters" class="text-sm text-primary-800 font-medium hover:underline mt-2">Reset Filters</button>
           </div>
         </aside>
 
@@ -66,12 +70,18 @@
           <!-- Sort bar -->
           <div class="flex items-center justify-between mb-6">
             <p class="text-sm text-slate-500">{{ totalResults }} gifts found</p>
-            <select v-model="sortBy" @change="fetchGifts" class="input-field !w-auto !py-2 text-sm">
-              <option value="newest">Newest</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="popular">Most Popular</option>
-            </select>
+            <UiCustomSelect
+              v-model="sortBy"
+              :options="[
+                { label: 'Newest', value: 'newest' },
+                { label: 'Price: Low to High', value: 'price-asc' },
+                { label: 'Price: High to Low', value: 'price-desc' },
+                { label: 'Most Popular', value: 'popular' }
+              ]"
+              @change="fetchGifts"
+              placeholder="Sort by"
+              class="w-48"
+            />
           </div>
 
           <!-- Loading -->
@@ -116,10 +126,12 @@
           </div>
 
           <!-- Empty state -->
-          <div v-else class="text-center py-20">
-            <div class="text-6xl mb-4">🔍</div>
+          <div v-else class="flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-24 h-24 bg-primary-50 rounded-full flex items-center justify-center mb-6">
+              <PackageSearch class="w-12 h-12 text-primary-300" />
+            </div>
             <h3 class="text-xl font-heading font-bold text-slate-900 mb-2">No gifts found</h3>
-            <p class="text-slate-500 mb-6">Try adjusting your filters or search terms</p>
+            <p class="text-slate-500 max-w-md mb-8">We couldn't find any perfect gifts matching your current filters. Try tweaking your search!</p>
             <button @click="resetFilters" class="btn-primary">Reset Filters</button>
           </div>
 
@@ -144,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { Star } from 'lucide-vue-next';
+import { Search, SlidersHorizontal, Star, PackageSearch } from 'lucide-vue-next';
 import type { Gift } from '~/types';
 import { useGifts } from '~/composables/modules/gifts/useGifts';
 import { formatNaira } from '~/utils/formatCurrency';
@@ -206,9 +218,10 @@ const fetchGifts = async () => {
     params.set('order', order);
 
     const result = await getGifts(Object.fromEntries(params.entries()));
-    gifts.value = result.data || result;
-    totalResults.value = result.meta?.total || gifts.value.length;
-    totalPages.value = result.meta?.totalPages || 1;
+    const payload = result.data || result;
+    gifts.value = Array.isArray(payload.data) ? payload.data : (Array.isArray(payload) ? payload : []);
+    totalResults.value = payload.meta?.total || gifts.value.length;
+    totalPages.value = payload.meta?.totalPages || 1;
   } catch (e) {
     console.error('Failed to fetch gifts:', e);
     gifts.value = [];

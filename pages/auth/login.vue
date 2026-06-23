@@ -1,17 +1,26 @@
 <template>
-  <div class="card p-8 animate-scale-in">
+  <div class="bg-white rounded-[2rem] border border-slate-100 p-8 md:p-10 animate-scale-in max-w-md mx-auto">
     <h2 class="text-2xl font-heading font-bold text-slate-900 text-center mb-2">Welcome Back</h2>
     <p class="text-slate-500 text-center mb-8">Sign in to your CurateWithNG account</p>
 
     <form @submit.prevent="handleLogin" class="space-y-4">
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Email</label>
-        <input v-model="email" type="email" required class="input-field" placeholder="you@example.com" />
-      </div>
-      <div>
-        <label class="text-sm font-medium text-slate-700 mb-1 block">Password</label>
-        <input v-model="password" type="password" required class="input-field" placeholder="••••••••" />
-      </div>
+      <UiCustomInput
+        v-model="email"
+        type="email"
+        required
+        label="Email"
+        placeholder="you@example.com"
+      />
+      <UiCustomInput
+        v-model="password"
+        type="password"
+        required
+        minlength="8"
+        pattern=".{8,}"
+        title="Password must be at least 8 characters long"
+        label="Password"
+        placeholder="••••••••"
+      />
       <div class="flex items-center justify-between">
         <label class="flex items-center gap-2 text-sm text-slate-600">
           <input type="checkbox" class="rounded border-slate-300 text-primary-800 focus:ring-primary-500" />
