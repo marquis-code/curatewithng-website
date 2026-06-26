@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen grid lg:grid-cols-2 bg-white">
     <!-- Left side: Form slot -->
-    <div class="relative flex flex-col justify-center px-6 sm:px-16 lg:px-24 py-12 overflow-y-auto max-h-screen">
+    <div class="relative flex flex-col justify-center px-4 sm:px-16 lg:px-24 py-12 overflow-y-auto max-h-screen">
       <div class="w-full max-w-md mx-auto">
         <NuxtLink to="/" class="flex items-center justify-center gap-3 mb-10">
           <div class="w-10 h-10 bg-primary-900 rounded-xl flex items-center justify-center">
