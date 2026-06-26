@@ -39,6 +39,9 @@
               <div :class="['font-semibold text-sm relative z-10', form.relationship === rel.value ? 'text-white' : 'text-slate-900']">{{ rel.label }}</div>
             </button>
           </div>
+          <div v-if="form.relationship === 'other'" class="animate-fade-in mt-6">
+            <UiCustomInput v-model="form.customRelationship" placeholder="Please specify relationship" />
+          </div>
           <UiCustomInput v-model="form.recipientName" placeholder="Recipient's name (optional)" class="mt-4" />
         </div>
 
@@ -67,27 +70,40 @@
 
         <!-- Step 3: Budget -->
         <div v-if="currentStep === 3" class="animate-fade-in">
-          <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">What's your budget?</h2>
-          <p class="text-slate-500 mb-6">Set your budget range in Naira</p>
-          <div class="grid grid-cols-2 gap-4">
+          <h2 class="text-xl font-heading font-bold text-slate-900 mb-2">What's your ideal budget?</h2>
+          <p class="text-slate-500 mb-6">Set the specific amount you'd like to spend</p>
+          <div class="mb-6">
             <UiCustomInput
-              v-model="formattedBudgetMin"
+              v-model="formattedIdealBudget"
               type="text"
-              label="Minimum (₦)"
-              placeholder="5,000"
-            />
-            <UiCustomInput
-              v-model="formattedBudgetMax"
-              type="text"
-              label="Maximum (₦)"
+              label="Ideal Budget (₦)"
               placeholder="50,000"
             />
           </div>
-          <div class="flex gap-2 mt-4 flex-wrap">
-            <button v-for="preset in budgetPresets" :key="preset.label" @click="budgetMinNaira = preset.min; budgetMaxNaira = preset.max"
-              class="px-4 py-2 rounded-xl bg-slate-50 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all">
-              {{ preset.label }}
-            </button>
+          
+          <h3 class="text-md font-heading font-bold text-slate-900 mb-3 mt-8">How flexible are you?</h3>
+          <div class="space-y-3">
+            <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 cursor-pointer transition-colors hover:bg-slate-50" :class="{ 'bg-primary-50 border-primary-200 ring-1 ring-primary-500': budgetFlexibility === 'STRICT' }">
+              <input type="radio" v-model="budgetFlexibility" value="STRICT" class="mt-1" />
+              <div>
+                <div class="font-semibold text-slate-900">Strict</div>
+                <div class="text-sm text-slate-500">Don't exceed my ideal budget</div>
+              </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 cursor-pointer transition-colors hover:bg-slate-50" :class="{ 'bg-primary-50 border-primary-200 ring-1 ring-primary-500': budgetFlexibility === 'FLEXIBLE' }">
+              <input type="radio" v-model="budgetFlexibility" value="FLEXIBLE" class="mt-1" />
+              <div>
+                <div class="font-semibold text-slate-900">Flexible</div>
+                <div class="text-sm text-slate-500">Up to 20% above is okay</div>
+              </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 cursor-pointer transition-colors hover:bg-slate-50" :class="{ 'bg-primary-50 border-primary-200 ring-1 ring-primary-500': budgetFlexibility === 'VERY_FLEXIBLE' }">
+              <input type="radio" v-model="budgetFlexibility" value="VERY_FLEXIBLE" class="mt-1" />
+              <div>
+                <div class="font-semibold text-slate-900">Very flexible</div>
+                <div class="text-sm text-slate-500">Just find the best option</div>
+              </div>
+            </label>
           </div>
         </div>
 
@@ -163,23 +179,37 @@
 
         <div class="space-y-4">
           <div v-for="(rec, i) in recommendations" :key="i" class="card p-6 flex gap-4 items-start">
-            <div class="w-24 h-24 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
-              <img :src="rec.gift.images?.[0] || '/placeholder-gift.jpg'" :alt="rec.gift.name" class="w-full h-full object-cover" />
+            <div class="w-24 h-24 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center">
+              <img v-if="!rec.isCustom" :src="(rec.gift?.images?.[0] as string) || '/placeholder-gift.jpg'" :alt="rec.gift?.name as string" class="w-full h-full object-cover" />
+              <div v-else class="text-center w-full h-full bg-amber-50 flex flex-col items-center justify-center text-amber-500">
+                <component :is="getCategoryIcon(rec.customGift?.category || '')" class="w-8 h-8 mb-1" />
+                <div class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Curated Idea</div>
+              </div>
             </div>
             <div class="flex-1">
               <div class="flex items-start justify-between">
                 <div>
-                  <h3 class="font-heading font-bold text-slate-900">{{ rec.gift.name }}</h3>
-                  <p class="text-sm text-primary-600 font-medium">{{ formatNaira(rec.gift.discountPrice || rec.gift.price) }}</p>
+                  <h3 class="font-heading font-bold text-slate-900">{{ rec.isCustom ? rec.customGift?.name : rec.gift?.name }}</h3>
+                  <p v-if="!rec.isCustom" class="text-sm text-primary-600 font-medium">{{ formatNaira(rec.gift?.discountPrice || rec.gift?.price || 0) }}</p>
+                  <p v-else class="text-sm text-amber-600 font-medium">Price on request</p>
                 </div>
-                <div class="flex items-center gap-1 px-3 py-1 rounded-full bg-accent-50 text-accent-700 text-sm font-bold">
-                  {{ rec.score }}% match
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-1 px-3 py-1 rounded-full bg-accent-50 text-accent-700 text-sm font-bold">
+                    {{ rec.score }}% match
+                  </div>
+                  <SaveGiftButton v-if="!rec.isCustom" :giftId="rec.gift?._id as string" size="sm" />
                 </div>
               </div>
+              <p v-if="rec.isCustom" class="text-sm text-slate-600 mt-2">{{ rec.customGift?.description }}</p>
               <p class="text-sm text-slate-500 mt-2 italic">"{{ rec.reasoning }}"</p>
               <div class="flex gap-2 mt-3">
-                <NuxtLink :to="`/gifts/${rec.gift.slug}`" class="btn-ghost !py-1.5 !px-3 text-sm">View Details</NuxtLink>
-                <button @click="addToCart(rec.gift)" class="btn-primary !py-1.5 !px-3 text-sm">Add to Cart</button>
+                <template v-if="!rec.isCustom">
+                  <NuxtLink :to="`/gifts/${rec.gift?.slug}`" class="btn-ghost !py-1.5 !px-3 text-sm">View Details</NuxtLink>
+                  <button @click="addToCart(rec.gift as any)" class="btn-primary !py-1.5 !px-3 text-sm">Add to Cart</button>
+                </template>
+                <template v-else>
+                  <button class="bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-bold rounded-xl !py-1.5 !px-4 text-sm" @click="selectedCustomGift = rec.customGift; showSourcingModal = true">Source This For Me</button>
+                </template>
               </div>
             </div>
           </div>
@@ -191,11 +221,21 @@
         </div>
       </div>
     </div>
+    <!-- Sourcing Modal -->
+    <SourcingModal 
+      v-if="showSourcingModal" 
+      :gift="selectedCustomGift"
+      :occasion="form.occasion"
+      :recipient-profile="form"
+      :ideal-budget="idealBudgetNaira"
+      :budget-flexibility="budgetFlexibility"
+      @close="showSourcingModal = false" 
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Loader2, User, Users, Heart, Gift, Briefcase, GraduationCap, PartyPopper, Home, Baby } from 'lucide-vue-next';
+import { Loader2, User, Users, Heart, Gift, Briefcase, GraduationCap, PartyPopper, Home, Baby, Sparkles, Plane, Utensils, Music, Book } from 'lucide-vue-next';
 import { useCurator } from '~/composables/modules/curator/useCurator';
 import type { Gift as GiftType, CurationRecommendation } from '~/types';
 import { formatNaira } from '~/utils/formatCurrency';
@@ -206,40 +246,82 @@ useHead({ title: 'AI Gift Curator — CurateWithNG' });
 const { generateCuration } = useCurator();
 const cartStore = useCartStore();
 
-const currentStep = ref(1);
+const currentStep = ref<number>(1);
 const totalSteps = 5;
 const generating = ref(false);
 const showResults = ref(false);
 const recommendations = ref<CurationRecommendation[]>([]);
 
-const budgetMinNaira = ref(5000);
-const budgetMaxNaira = ref(50000);
+const budgetFlexibility = ref('FLEXIBLE');
+const idealBudgetNaira = ref(50000);
 
-const formattedBudgetMin = computed({
-  get: () => budgetMinNaira.value ? budgetMinNaira.value.toLocaleString('en-NG') : '',
+const formattedIdealBudget = computed({
+  get: () => idealBudgetNaira.value ? idealBudgetNaira.value.toLocaleString('en-NG') : '',
   set: (val: string) => {
     const num = parseInt(val.replace(/,/g, '').replace(/\D/g, ''), 10);
-    budgetMinNaira.value = isNaN(num) ? 0 : num;
+    idealBudgetNaira.value = isNaN(num) ? 0 : num;
   }
 });
 
-const formattedBudgetMax = computed({
-  get: () => budgetMaxNaira.value ? budgetMaxNaira.value.toLocaleString('en-NG') : '',
-  set: (val: string) => {
-    const num = parseInt(val.replace(/,/g, '').replace(/\D/g, ''), 10);
-    budgetMaxNaira.value = isNaN(num) ? 0 : num;
-  }
-});
+const showSourcingModal = ref(false);
+const selectedCustomGift = ref<any>(null);
+
+const getCategoryIcon = (category: string) => {
+  const cat = category?.toLowerCase() || '';
+  if (cat.includes('travel') || cat.includes('trip') || cat.includes('flight')) return Plane;
+  if (cat.includes('food') || cat.includes('dining') || cat.includes('restaurant')) return Utensils;
+  if (cat.includes('music') || cat.includes('concert')) return Music;
+  if (cat.includes('book') || cat.includes('reading')) return Book;
+  if (cat.includes('wellness') || cat.includes('spa')) return Heart;
+  if (cat.includes('home') || cat.includes('decor')) return Home;
+  if (cat.includes('tech') || cat.includes('gadget')) return Briefcase;
+  return Sparkles;
+};
 
 const form = reactive({
   recipientName: '',
   relationship: '',
+  customRelationship: '',
   age: undefined as number | undefined,
   gender: '',
   interests: [] as string[],
   occasion: '',
   additionalNotes: '',
 });
+
+// Restore state from sessionStorage
+onMounted(() => {
+  const savedState = sessionStorage.getItem('curate_wizard_state');
+  if (savedState) {
+    try {
+      const parsed = JSON.parse(savedState);
+      currentStep.value = parsed.currentStep || 1;
+      showResults.value = parsed.showResults || false;
+      recommendations.value = parsed.recommendations || [];
+      idealBudgetNaira.value = parsed.idealBudgetNaira || 50000;
+      budgetFlexibility.value = parsed.budgetFlexibility || 'FLEXIBLE';
+      Object.assign(form, parsed.form || {});
+    } catch (e) {
+      console.error('Failed to parse saved curation state', e);
+    }
+  }
+});
+
+// Save state to sessionStorage
+watch(
+  () => ({
+    currentStep: currentStep.value,
+    showResults: showResults.value,
+    recommendations: recommendations.value,
+    idealBudgetNaira: idealBudgetNaira.value,
+    budgetFlexibility: budgetFlexibility.value,
+    form,
+  }),
+  (newState) => {
+    sessionStorage.setItem('curate_wizard_state', JSON.stringify(newState));
+  },
+  { deep: true }
+);
 
 const relationships = [
   { value: 'mother', label: 'Mother', icon: User },
@@ -271,13 +353,7 @@ const occasions = [
   { value: 'just-because', label: 'Just Because', icon: Gift },
 ];
 
-const budgetPresets = [
-  { label: '₦5k–₦15k', min: 5000, max: 15000 },
-  { label: '₦15k–₦30k', min: 15000, max: 30000 },
-  { label: '₦30k–₦75k', min: 30000, max: 75000 },
-  { label: '₦75k–₦150k', min: 75000, max: 150000 },
-  { label: '₦150k+', min: 150000, max: 500000 },
-];
+
 
 const interestOptions = [
   'Fashion', 'Skincare', 'Cooking', 'Tech', 'Books', 'Fitness', 'Art',
@@ -293,9 +369,11 @@ const toggleInterest = (interest: string) => {
 
 const canProceed = computed(() => {
   switch (currentStep.value) {
-    case 1: return form.relationship !== '';
+    case 1: 
+      if (form.relationship === 'other') return form.customRelationship.trim().length > 0;
+      return form.relationship !== '';
     case 2: return form.occasion !== '';
-    case 3: return budgetMinNaira.value > 0 && budgetMaxNaira.value > budgetMinNaira.value;
+    case 3: return idealBudgetNaira.value > 0;
     case 4: return form.interests.length > 0;
     default: return true;
   }
@@ -308,20 +386,25 @@ const nextStep = () => {
 };
 
 const generateRecommendations = async () => {
+  const min = idealBudgetNaira.value * 0.8;
+  let max = idealBudgetNaira.value;
+  if (budgetFlexibility.value === 'FLEXIBLE') max = idealBudgetNaira.value * 1.2;
+  else if (budgetFlexibility.value === 'VERY_FLEXIBLE') max = idealBudgetNaira.value * 1.5;
+
   generating.value = true;
   try {
     const result = await generateCuration({
       recipientName: form.recipientName,
-      relationship: form.relationship,
+      relationship: form.relationship === 'other' ? form.customRelationship : form.relationship,
       age: form.age,
       gender: form.gender,
       interests: form.interests,
       occasion: form.occasion,
-      budgetMin: budgetMinNaira.value * 100, // Convert to kobo
-      budgetMax: budgetMaxNaira.value * 100,
+      budgetMin: min * 100, // Convert to kobo
+      budgetMax: max * 100,
       additionalNotes: form.additionalNotes,
     });
-    recommendations.value = result.recommendations || [];
+    recommendations.value = result.data?.recommendations || result.recommendations || [];
     showResults.value = true;
   } catch (error) {
     console.error('Curation failed:', error);
@@ -331,9 +414,11 @@ const generateRecommendations = async () => {
   }
 };
 
-const addToCart = (gift: Gift) => {
+const addToCart = (gift: GiftType) => {
   cartStore.addItem(gift);
 };
+
+
 
 const resetWizard = () => {
   currentStep.value = 1;
@@ -341,12 +426,14 @@ const resetWizard = () => {
   recommendations.value = [];
   form.recipientName = '';
   form.relationship = '';
+  form.customRelationship = '';
   form.age = undefined;
   form.gender = '';
   form.interests = [];
   form.occasion = '';
   form.additionalNotes = '';
-  budgetMinNaira.value = 5000;
-  budgetMaxNaira.value = 50000;
+  idealBudgetNaira.value = 50000;
+  budgetFlexibility.value = 'FLEXIBLE';
+  sessionStorage.removeItem('curate_wizard_state');
 };
 </script>

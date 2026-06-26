@@ -130,9 +130,16 @@ export interface CurationRequest {
 }
 
 export interface CurationRecommendation {
-  gift: Gift;
+  gift?: Gift;
   score: number;
   reasoning: string;
+  isCustom?: boolean;
+  customGift?: {
+    name: string;
+    category: string;
+    price: number;
+    description: string;
+  };
 }
 
 export interface CurationResult {

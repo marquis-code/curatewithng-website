@@ -101,7 +101,10 @@
               :to="`/gifts/${gift.slug}`"
               class="card-interactive overflow-hidden group"
             >
-              <div class="aspect-square bg-slate-100 overflow-hidden">
+              <div class="aspect-square bg-slate-100 overflow-hidden relative">
+                <div class="absolute top-3 right-3 z-10">
+                  <SaveGiftButton :giftId="gift._id" />
+                </div>
                 <img
                   :src="gift.images?.[0] || '/placeholder-gift.jpg'"
                   :alt="gift.name"

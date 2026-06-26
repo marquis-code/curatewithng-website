@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-[2rem] border border-slate-100 p-8 md:p-10 animate-scale-in max-w-md mx-auto">
+  <div class="w-full animate-scale-in">
     <h2 class="text-2xl font-heading font-bold text-slate-900 text-center mb-2">Create Account</h2>
     <p class="text-slate-500 text-center mb-8">Join CurateWithNG and start gifting smarter</p>
 
@@ -65,7 +65,11 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'auth' });
+definePageMeta({ 
+  layout: 'auth',
+  authImageTextTitle: 'Start Gifting.',
+  authImageTextBody: 'Create an account to access curated, one-of-a-kind items.'
+});
 useHead({ title: 'Create Account — CurateWithNG' });
 
 import { useAuth } from '~/composables/modules/auth/useAuth';
@@ -122,7 +126,8 @@ const handleRegister = async () => {
     
     setTimeout(() => {
       showCelebration.value = false;
-      navigateTo('/dashboard');
+      const intendedRoute = useCookie('intended_route').value;
+      navigateTo(intendedRoute || '/dashboard');
     }, 4500);
 
   } catch (e: any) {
@@ -149,7 +154,8 @@ const handleGoogleLogin = async () => {
     
     setTimeout(() => {
       showCelebration.value = false;
-      navigateTo('/dashboard');
+      const intendedRoute = useCookie('intended_route').value;
+      navigateTo(intendedRoute || '/dashboard');
     }, 4500);
 
   } catch (e: any) {

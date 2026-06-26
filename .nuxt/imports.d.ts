@@ -41,3 +41,4 @@ export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_mod
 export { useImage } from '../node_modules/@nuxt/image/dist/runtime/composables';
 export { useRobotsRule } from '../node_modules/@nuxtjs/robots/dist/runtime/app/composables/useRobotsRule';
 export { useBotDetection } from '../node_modules/@nuxtjs/robots/dist/runtime/app/composables/useBotDetection';
+export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';

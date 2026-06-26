@@ -30,6 +30,14 @@
 
           <!-- Right side -->
           <div class="flex items-center gap-5">
+            <!-- Notifications -->
+            <NuxtLink v-if="!!user" to="/dashboard/notifications" class="relative p-2 text-slate-600 hover:text-primary-800 transition-colors">
+              <Bell class="w-6 h-6" />
+              <span v-if="unreadCount > 0" class="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-[11px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+                {{ unreadCount }}
+              </span>
+            </NuxtLink>
+
             <!-- Cart -->
             <NuxtLink to="/cart" class="relative p-2 text-slate-600 hover:text-primary-800 transition-colors">
               <ShoppingCart class="w-6 h-6" />
@@ -39,7 +47,7 @@
             </NuxtLink>
 
             <!-- Auth Desktop -->
-            <template v-if="!!token">
+            <template v-if="!!user">
               <div class="relative hidden sm:block" ref="dropdownRef">
                 <button @click="showDropdown = !showDropdown" class="flex items-center gap-3 pl-2 pr-4 py-1.5 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
                   <div class="w-8 h-8 bg-slate-900 rounded-full flex items-center justify-center">
@@ -104,7 +112,7 @@
           
           <hr class="border-slate-100">
           
-          <div v-if="!!token" class="space-y-4">
+          <div v-if="!!user" class="space-y-4">
             <div class="flex items-center gap-3 mb-6">
               <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
                 <span class="text-slate-900 font-bold text-lg">{{ user?.firstName?.charAt(0) }}</span>
@@ -186,10 +194,12 @@
 </template>
 
 <script setup lang="ts">
-import { ShoppingCart, Menu, X, Twitter, Instagram } from 'lucide-vue-next';
+import { ShoppingCart, Menu, X, Twitter, Instagram, Bell } from 'lucide-vue-next';
 import { useUser } from '~/composables/modules/auth/user';
+import { useNotifications } from '~/composables/modules/notifications/useNotifications';
 
-const { user, token, logOut } = useUser();
+const { user, logOut } = useUser();
+const { unreadCount, connectSocket, disconnectSocket, fetchUnreadCount } = useNotifications();
 const cartStore = useCartStore();
 const showDropdown = ref(false);
 const showMobile = ref(false);
@@ -209,4 +219,20 @@ if (import.meta.client) {
     }
   });
 }
+
+onMounted(() => {
+  if (user.value) {
+    connectSocket();
+    fetchUnreadCount();
+  }
+});
+
+watch(() => user.value, (newVal) => {
+  if (newVal) {
+    connectSocket();
+    fetchUnreadCount();
+  } else {
+    disconnectSocket();
+  }
+});
 </script>

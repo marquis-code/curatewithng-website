@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-[2rem] border border-slate-100 p-8 md:p-10 animate-scale-in max-w-md mx-auto">
+  <div class="w-full animate-scale-in">
     <h2 class="text-2xl font-heading font-bold text-slate-900 text-center mb-2">Welcome Back</h2>
     <p class="text-slate-500 text-center mb-8">Sign in to your CurateWithNG account</p>
 
@@ -54,7 +54,11 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next';
 
-definePageMeta({ layout: 'auth' });
+definePageMeta({ 
+  layout: 'auth',
+  authImageTextTitle: 'Discover Joy.',
+  authImageTextBody: 'Log in to find the perfect gift for every occasion.'
+});
 useHead({ title: 'Sign In — CurateWithNG' });
 
 import { useAuth } from '~/composables/modules/auth/useAuth';
@@ -71,7 +75,8 @@ const handleLogin = async () => {
   error.value = '';
   try {
     await login({ email: email.value, password: password.value });
-    navigateTo('/dashboard');
+    const intendedRoute = useCookie('intended_route').value;
+    navigateTo(intendedRoute || '/');
   } catch (e: any) {
     error.value = e.data?.message || 'Invalid email or password';
     alert(error.value);
@@ -92,7 +97,8 @@ const handleGoogleLogin = async () => {
     const idToken = await result.user.getIdToken();
     
     await firebaseGoogleLogin({ token: idToken });
-    navigateTo('/dashboard');
+    const intendedRoute = useCookie('intended_route').value;
+    navigateTo(intendedRoute || '/');
   } catch (e: any) {
     error.value = e.message || 'Google Login failed';
     alert(error.value);

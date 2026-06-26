@@ -14,6 +14,8 @@ type HydrationStrategies = {
 type LazyComponent<T> = DefineComponent<HydrationStrategies, {}, {}, {}, {}, {}, {}, { hydrated: () => void }> & T
 
 interface _GlobalComponents {
+  SaveGiftButton: typeof import("../../components/SaveGiftButton.vue")['default']
+  SourcingModal: typeof import("../../components/SourcingModal.vue")['default']
   UiCelebrationModal: typeof import("../../components/ui/CelebrationModal.vue")['default']
   UiCustomInput: typeof import("../../components/ui/CustomInput.vue")['default']
   UiCustomSelect: typeof import("../../components/ui/CustomSelect.vue")['default']
@@ -41,6 +43,8 @@ interface _GlobalComponents {
   Html: typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Html']
   Body: typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Body']
   NuxtIsland: typeof import("../../node_modules/nuxt/dist/app/components/nuxt-island")['default']
+  LazySaveGiftButton: LazyComponent<typeof import("../../components/SaveGiftButton.vue")['default']>
+  LazySourcingModal: LazyComponent<typeof import("../../components/SourcingModal.vue")['default']>
   LazyUiCelebrationModal: LazyComponent<typeof import("../../components/ui/CelebrationModal.vue")['default']>
   LazyUiCustomInput: LazyComponent<typeof import("../../components/ui/CustomInput.vue")['default']>
   LazyUiCustomSelect: LazyComponent<typeof import("../../components/ui/CustomSelect.vue")['default']>

@@ -8,7 +8,7 @@
         :options="countries.map(c => ({ label: `${c.flag} ${c.dialCode}`, value: c.dialCode }))"
         buttonClass="!rounded-r-none !border-r-0 !bg-slate-50"
         class="w-[140px]"
-        :placeholder="false"
+        placeholder="Code"
       />
       
       <!-- Phone Number Input -->

@@ -64,7 +64,10 @@
       
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <NuxtLink v-for="gift in gifts" :key="gift._id" :to="`/gifts/${gift.slug}`" class="card-interactive overflow-hidden group">
-          <div class="aspect-square bg-slate-50 overflow-hidden">
+          <div class="aspect-square bg-slate-50 overflow-hidden relative">
+            <div class="absolute top-3 right-3 z-10">
+              <SaveGiftButton :giftId="gift._id" />
+            </div>
             <img :src="gift.images?.[0] || '/placeholder-gift.jpg'" :alt="gift.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
           <div class="p-4">

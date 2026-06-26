@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-8 animate-scale-in">
+  <div class="w-full animate-scale-in">
     <h2 class="text-2xl font-heading font-bold text-slate-900 text-center mb-2">Reset Password</h2>
     <p class="text-slate-500 text-center mb-8">Enter your email to receive a password reset link.</p>
 
@@ -27,7 +27,11 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next';
 
-definePageMeta({ layout: 'auth' });
+definePageMeta({ 
+  layout: 'auth',
+  authImageTextTitle: 'We\'ve got you.',
+  authImageTextBody: 'Recover your account and get back to gifting.'
+});
 useHead({ title: 'Forgot Password — CurateWithNG' });
 
 const email = ref('');

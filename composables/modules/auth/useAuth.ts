@@ -6,26 +6,30 @@ export const useAuth = () => {
 
   const login = async (payload: any) => {
     const response = await auth_api.login(payload);
-    setUser(response.data.user);
-    return response.data;
+    const data = response.data?.data || response.data;
+    setUser(data.user || data);
+    return data;
   };
 
   const register = async (payload: any) => {
     const response = await auth_api.register(payload);
-    setUser(response.data.user);
-    return response.data;
+    const data = response.data?.data || response.data;
+    setUser(data.user || data);
+    return data;
   };
 
   const firebaseGoogleLogin = async (payload: { token: string }) => {
     const response = await auth_api.firebaseGoogleLogin(payload);
-    setUser(response.data.user);
-    return response.data;
+    const data = response.data?.data || response.data;
+    setUser(data.user || data);
+    return data;
   };
 
   const fetchProfile = async () => {
     const response = await auth_api.getProfile();
-    setUser(response.data);
-    return response.data;
+    const data = response.data?.data || response.data;
+    setUser(data);
+    return data;
   };
 
   return { login, register, firebaseGoogleLogin, fetchProfile };
