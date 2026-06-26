@@ -181,12 +181,26 @@ const fetchGift = async () => {
     let rawData = await getGiftBySlug(route.params.slug as string);
     console.log("Raw fetched data:", rawData);
     
-    // Aggressive unwrap just in case the interceptor passes the raw payload
+    // Aggressively unwrap the payload.
+    // Case 1: rawData is an AxiosResponse: { data: { success: true, data: { ... } } }
+    // Case 2: rawData is the response body: { success: true, data: { ... } }
+    // Case 3: rawData is the gift itself: { _id: '...', name: '...' }
+    
     let actualData = rawData;
+    
+    // First unwrap Axios response if it exists
+    if (actualData && actualData.data && typeof actualData.data === 'object' && ('success' in actualData.data || 'data' in actualData.data || 'name' in actualData.data)) {
+      actualData = actualData.data;
+    }
+    
+    // Then unwrap backend JSON structure { success: true, data: { ... } }
     if (actualData && actualData.success !== undefined && actualData.data) {
-       actualData = actualData.data;
-    } else if (actualData && actualData.data && actualData.data.name) {
-       actualData = actualData.data;
+      actualData = actualData.data;
+    }
+    
+    // Just in case it's nested double data somehow
+    if (actualData && actualData.data && actualData.data.name) {
+      actualData = actualData.data;
     }
     
     console.log("Unwrapped data:", actualData);
